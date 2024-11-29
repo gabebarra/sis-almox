@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% load humanize %}
+
+    {% block content %}
+    {% for c in conserto %}
+    <div class = "container">
+            <h1 style="text-align:center;">Excluir Conserto </h1>
+            <form method = 'GET' action= '' enctype = "multipart/form-data" novalidate id = "fornecedor-form">{% csrf_token %}
+                <h3 style="text-align:center;">VOCÊ TEM CERTEZA?</h3>
+                <h4 style="text-align:center;"><span style="color: red; font-weight: bold;">{{ c.obs }}</span></h4>
+                
+                <div class="col-md-12" style="text-align:center;">
+                        <input type="submit" name="excluir" id="excluir" value="Excluir" class="btn btn-danger foot-btn"></button>
+                </div>           
+            </form>
+        </div>
+        {% endfor %}
+        {% endblock %}
+
+</body>
+</html>

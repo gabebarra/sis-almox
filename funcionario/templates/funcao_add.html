@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+    {% block content %}
+    <div class = "container">
+            <h1>Adicionar Função</h1>
+            <form method = 'POST' action= '' enctype = "multipart/form-data" novalidate id = "id_funcao">{% csrf_token %}
+                {{ form.nome|as_crispy_field }}
+                <div class="col-md-12">
+                    <button type="submit" class="btn btn-primary">Salvar</button>
+                </div>
+            </form>
+        </div>
+        {% endblock %}
+
+
+{% block js %}
+    <script src="{% static 'js/JanelaSemRefresh.js' %}"></script>
+{% endblock js %}
+    

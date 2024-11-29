@@ -1,0 +1,37 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <!--  This file has been downloaded from https://bootdey.com  -->
+    <!--  All snippets are MIT license https://bootdey.com/license -->
+    <title>Bootdey.com</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="http://netdna.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
+    <link href="{% static 'styles/css/galeria.css' %}" rel="stylesheet">
+</head>
+<body>
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <div id="grid" class="row">
+                {% for foto in fotos %}
+                    <div class="mix col-sm-3 page1 page4 margin30">
+                        <div class="item-img-wrap ">
+                            <img src="{{ foto.foto.url }}" class="img-responsive">
+                            <div class="item-img-overlay">
+                                <a href="{{foto.foto.url }}" class="show-image" target="_blank">
+                                    <span></span>
+                                </a>
+                            </div>
+                        </div> 
+                    </div>
+                {% endfor %}                                
+            </div><!--grid-->
+        </div>
+    </div>
+</div>
+
+<script src="http://netdna.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+</body>
+</html>

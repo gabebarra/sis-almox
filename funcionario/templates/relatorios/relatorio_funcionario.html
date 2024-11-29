@@ -1,0 +1,118 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load humanize %}
+{% block content %}
+<div class="row">
+        <div class="col-md-12">
+            <ul class="nav nav-tabs justify-content-end mb-4" id="myTab" role="tablist">
+                <li class="nav-item">
+                    <a class="nav-link active" id="invoice-tab" data-toggle="tab" href="#invoice" role="tab" aria-controls="invoice" aria-selected="true">Relatório</a>
+                </li>
+
+            </ul>
+            <div class="card">
+
+                <div class="tab-content" id="myTabContent">
+                    <div class="tab-pane fade show active" id="invoice" role="tabpanel" aria-labelledby="invoice-tab">
+                        <div class="d-sm-flex mb-5" data-view="print">
+                            <span class="m-auto"></span>
+                            <button class="btn btn-danger mb-sm-0 mb-3 print-invoice" onclick="window.print();return false;">Salvar / Imprimir</button>
+                        </div>
+                        <!---===== Print Area =======-->
+                        <div id="print-area">
+                            <div style="width: 100px;">
+                                <img src="{% static 'images/logo.png' %}" alt="">
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <h4 class="font-weight-bold">FUNCIONÁRIO: {{ funcionario }}</h4>
+                                    <h5 class="font-weight-bold">Empresa: <span style="font-weight: normal">{{ funcionario.empresa }}</span></h5>
+                                    <h5 class="font-weight-bold">Função: <span style="font-weight: normal">{{ funcionario.funcao }}</span></h5>
+                                    <h5 class="font-weight-bold">Admissão: <span style="font-weight: normal">{{ funcionario.get_data }}</span></h5>
+                                </div>
+                            </div>
+                            <div class="mt-3 mb-4 border-top"></div>
+                            
+                        <div class="row mb-4" style="margin-top: -3%;">
+                            <div class="col-md-12 mb-4">
+                                <div class="card-body" style="text-align: center; margin-bottom: -4%;">
+                                    <h2>EPIS PENDENTES</h2>
+                                </div>
+                            </div>
+                        </div>
+
+                            <div class="row">
+                                <div class="col-md-12 table-responsive">
+                                    <table class="table table-hover mb-4">
+                                        <thead class="bg-gray-300">
+                                            <tr>
+                                                <th scope="col">Data</th>
+                                                <th scope="col">Obs</th>
+                                                <th scope="col">Item</th>
+                                                <th scope="col">Qtde</th>
+                                                <th scope="col">Validade</th>
+                                                <th scope="col">Devolução</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for epi in epis %}
+                                            <tr>
+                                                <td>{{ epi.get_data }}</td>
+                                                <td>{{ epi.obs|default_if_none:'-' }}</td>
+                                                <td>{{ epi.item }}</td>
+                                                <td>{{ epi.quantidade }} {{ epi.item.unidade }}</td>
+                                                <td>{{ epi.vencimento|date:"d/m/Y" }}</td>
+                                                <td>{% firstof epi.devolucao|date:"d/m/Y" "Pendente" %} </td>
+                                            </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+
+                            <div class="mt-3 mb-4 border-top"></div>
+                            
+                        <div class="row mb-4" style="margin-top: -3%;">
+                            <div class="col-md-12 mb-4">
+                                <div class="card-body" style="text-align: center; margin-bottom: -4%;">
+                                    <h2>EMPRÉSTIMOS PENDENTES</h2>
+                                </div>
+                            </div>
+                        </div>
+
+                            <div class="row">
+                                <div class="col-md-12 table-responsive">
+                                    <table class="table table-hover mb-4">
+                                        <thead class="bg-gray-300">
+                                            <tr>
+                                                <th scope="col">Data</th>
+                                                <th scope="col">Obs</th>
+                                                <th scope="col">Item</th>
+                                                <th scope="col">Qtde</th>
+                                                <th scope="col">Devolução</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for pendente in pendentes %}
+                                            <tr>
+                                                <td>{{ pendente.get_data }}</td>
+                                                <td>{{ pendente.obs|default_if_none:'-' }}</td>
+                                                <td>{{ pendente.item }}</td>
+                                                <td>{{ pendente.quantidade }} {{ pendente.item.unidade }}</td>
+                                                <td>{% firstof pendente.devolucao|date:"d/m/Y" "Pendente" %} </td>
+                                            </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <!--==== / Print Area =====-->
+                    </div>
+                </div>
+            </div>
+        </div>
+                
+
+</div>
+{% endblock content %}

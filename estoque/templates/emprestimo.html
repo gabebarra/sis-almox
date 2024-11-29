@@ -1,0 +1,129 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load humanize %}
+{% block content %}
+
+<div class="breadcrumb">
+    <h1>EMPRÉSTIMOS</h1>
+    <ul>
+        <li>GERAL</li>
+    </ul>
+</div>
+
+<div class="separator-breadcrumb border-top"></div>
+
+<div class="row mb-4" style="margin-top: -3%;">
+    <div class="col-md-12 mb-4">
+        <div class="card-body" style="text-align: right;">
+            {% if user.is_authenticated %}
+            <a href="{% url 'estoque:item_emprestimo' %}" class="btn btn-success" onclick="return showAddPopup(this);">
+                <i class="nav-icon i-Right font-weight-bold" aria-hidden="true"></i> Empréstimo
+            </a>
+            {% endif %}
+            <a href="{% url 'estoque:index_emprestimo' %}" class="btn btn-info" onclick="return showAddPopup(this);">
+                <i class="nav-icon i-File-Clipboard-File--Text font-weight-bold" aria-hidden="true"></i> Relatório
+            </a>
+        </div>
+    </div>
+</div>
+
+<div class="row mb-4" style="margin-top: -4%;">
+    <div class="col-md-12 mb-4">
+        <div class="card text-left">
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table id="zero_configuration_table" class="display table table-striped table-bordered"
+                        style="width:100%">
+                        <thead class="thead-dark">
+                            <tr>
+                                <th>Data</th>
+                                <th>Item</th>
+                                <th>Funcionário</th>
+                                <th>Obra</th>
+                                <th>OBS</th>
+                                <th>QTDE</th>
+                                <th>Devolução</th>
+                                <th scope="col">Ação</th>
+                            </tr>
+                        </thead>
+                        <tbody style="background-color: rgb(255, 255, 181);">
+
+                            {% for saida in saidas %}
+
+                            {% if saida.emprestimo == True %}
+
+                            <tr>
+                                <td>{{ saida.get_data }}</td>
+                                <td> <a style="color: blue; font-weight: bold;"
+                                        href="/../../estoque/{{ saida.item.get_absolute_url }}"> {{ saida.item.nome }}
+                                    </a> 
+                                    {% if saida.galeria %}
+                                        <a href="{% url 'estoque:fotos_saida' pk=saida.id %}" target="_blank" class="text-danger mr-2" >
+                                        <i class="nav-icon i-File-Pictures font-weight-bold"></i></a>
+                                    {% endif %}  
+                                </td>
+                                <td> <a style="color: blue; font-weight: bold;"
+                                        href="/../../funcionarios/detalhe/{{ saida.funcionario.id }}">
+                                        {{ saida.funcionario.nome }} </a>  
+                                </td>
+                                {% if saida.obra %}
+                                <td> <a style="color: blue; font-weight: bold;"
+                                        href="{% url 'obra:obra_detalhe' pk=saida.obra.id %}">
+                                        {{ saida.obra.nome|default_if_none:'-' }} </a> </td>
+                                {% else %}
+                                    <td>-</td>
+                                {% endif %}
+                                <td>{{ saida.obs|default_if_none:'-' }}</td>
+                                <td>{{ saida.quantidade }} {{ saida.item.unidade }}</td>
+                                {% if saida.devolucao != NULL %}
+                                <td style="color: green; font-weight: bold;">{{ saida.get_devolucao }}
+                                </td>
+                                {% else %}
+                                <td style="color: red; font-weight: bold;">Pendente</td>
+                                {% endif %}
+                                <td>
+                                    {% if user.is_authenticated %}
+                                    <a href="{% url 'estoque:emprestimo_devolver' pk=saida.id %}" class="text-success mr-2"
+                                        onclick="return showAddPopup(this);">
+                                        <span style="font-weight: bold;">D</span>
+                                    </a>
+                                    <a href="{% url 'estoque:emprestimo_editar' pk=saida.id %}" class="text-success mr-2" 
+                                        onclick="return showAddPopup(this);">
+                                        <i class="nav-icon i-Pen-2 font-weight-bold"></i>
+                                    </a>
+                                    <a href="#" class="text-danger mr-2"
+                                        onclick="excluir({{ saida.id }}, 'emprestimo')">
+                                        <i class="nav-icon i-Close-Window font-weight-bold"></i>
+                                    </a>
+                                    {% endif %}      
+                                </td>
+                            </tr>
+                            {% endif %}
+                            {% endfor %}
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <th>Data</th>
+                                <th>Item</th>
+                                <th>Funcionário</th>
+                                <th>OBS</th>
+                                <th>QTDE</th>
+                                <th>Devolução</th>
+                                <th scope="col">Ação</th>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{% endblock content %}
+
+{% block js %}
+    <script src="{% static 'js/excluir_alert.js' %}"></script>
+    <script src="{% static 'js/vendor/sweetalert2.min.js' %}"></script>
+{% endblock js %}

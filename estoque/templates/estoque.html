@@ -1,0 +1,134 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load humanize %}
+{% block content %}
+
+<div class="breadcrumb">
+    <h1>ESTOQUE</h1>
+    <ul>
+        <li>GERAL</li>
+    </ul>
+</div>
+
+<div class="separator-breadcrumb border-top"></div>
+<div class="row mb-4" style="margin-top: -3%;">
+    <div class="col-md-12 mb-4">
+        <div class="card-body" style="text-align: right;">
+            <button style="margin-right: 25%;" class="btn btn-info dropdown-toggle" type="button" id="dropdownMenuButton"
+                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <i class="nav-icon i-File-Clipboard-File--Text font-weight-bold" aria-hidden="true"></i> Relatórios
+            </button>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                <a class="dropdown-item" href="{% url 'estoque:index_estoque' %}">
+                    <i class="i-Box-Full"> </i> Estoque
+                </a>
+                <a class="dropdown-item" href="{% url 'estoque:index_saida' %}">
+                    <i class="i-Remove"> </i> Saidas
+                </a>
+                <a class="dropdown-item" href="{% url 'estoque:index_entrada' %}">
+                    <i class="i-Add"> </i> Entradas
+                </a>
+                <a class="dropdown-item" href="{% url 'estoque:index_emprestimo' %}">
+                    <i class="i-Right"> </i> Emprestimos
+                </a>
+            </div>
+
+            {% if user.is_authenticated %}
+            <a href="{% url 'estoque:item_criar' %}" class="btn btn-primary" onclick="return showAddPopup(this);">
+                <i class="nav-icon i-Add font-weight-bold" aria-hidden="true"></i> Criar Item
+            </a>
+
+            <a href="{% url 'estoque:item_entrada' %}" class="btn btn-success" onclick="return showAddPopup(this);">
+                <i class="nav-icon i-Add font-weight-bold" aria-hidden="true"></i> Entrada
+            </a>
+
+            <a href="{% url 'estoque:item_saida' %}" class="btn btn-danger" onclick="return showAddPopup(this);">
+                <i class="nav-icon i-Remove font-weight-bold" aria-hidden="true"></i> Saida
+            </a>
+            <a href="{% url 'estoque:item_emprestimo' %}" class="btn btn-warning" onclick="return showAddPopup(this);">
+                <i class="nav-icon i-Right font-weight-bold" aria-hidden="true"></i> Empréstimo
+            </a>
+            {% endif %} 
+        </div>
+    </div>
+</div>
+
+
+<div class="row mb-4" style="margin-top: -4%;">
+    <div class="col-md-12 mb-4">
+        <div class="card text-left">
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table id="zero_configuration_table" class="display table table-striped table-bordered"
+                        style="width:100%">
+                        <thead class="thead-dark">
+                            <tr>
+                                <th>Nome</th>
+                                <th>Prateleira</th>
+                                <th>Categoria</th>
+                                <th>Estoque Min</th>
+                                <th>Estoque</th>
+                                <th scope="col">Ação</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for item in itens %}
+                            <tr>
+                                <td> <a style="color: blue; font-weight: bold;" href="{{ item.get_absolute_url }}">
+                                        {{ item.nome }} </a> </td>
+                                <td>{{ item.prateleira }}</td>
+                                <td>{{ item.categoria }}</td>
+                                <td>{{ item.estoque_min }} {{ item.unidade }}</td>
+                                <td>{{ item.estoque }} {{ item.unidade }} </td>
+                                <td>
+                                    {% if user.is_authenticated %}
+                                    <a href="entrada/{{ item.id }}" class="text-success mr-2"
+                                        onclick="return showAddPopup(this);">
+                                        <i class="nav-icon i-Up font-weight-bold"></i>
+                                    </a>
+                                    <a href="saida/{{ item.id }}" class="text-primary mr-2"
+                                        onclick="return showAddPopup(this);">
+                                        <i class="nav-icon i-Down font-weight-bold"></i>
+                                    </a>
+                                    <a href="emprestimo/{{ item.id }}" class="text-danger mr-2"
+                                        onclick="return showAddPopup(this);">
+                                        E
+                                    </a>
+                                    <a href="{% url 'estoque:item_editar' pk=item.id %}" class="text-success mr-2"
+                                        onclick="return showAddPopup(this);">
+                                        <i class="nav-icon i-Pen-2 font-weight-bold"></i>
+                                    </a>
+                                    <a href="#" class="text-danger mr-2" onclick="excluir({{ item.id }}, 'item')">
+                                        <i class="nav-icon i-Close-Window font-weight-bold"></i>
+                                    </a>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <th>Nome</th>
+                                <th>Prateleira</th>
+                                <th>Categoria</th>
+                                <th>Estoque Min</th>
+                                <th>Estoque</th>
+                                <th scope="col">Ação</th>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{% endblock content %}
+
+
+{% block js %}
+<script src="{% static 'js/excluir_alert.js' %}"></script>
+<script src="{% static 'js/vendor/sweetalert2.min.js' %}"></script>
+{% endblock js %}

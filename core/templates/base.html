@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+{% load static %}
+{% load humanize %}
+<html lang="en" dir="">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>SGA - Assis Metal</title>
+    <link href="https://fonts.googleapis.com/css?family=Nunito:300,400,400i,600,700,800,900" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'styles/css/themes/lite-purple.min.css' %}">
+    <link rel="stylesheet" href="{% static 'styles/vendor/datatables.min.css'%}">
+    <link rel="stylesheet" href="{% static 'styles/vendor/sweetalert2.min.css'%}">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.10/css/select2.min.css" rel="stylesheet" />
+
+</head>
+
+<body class="text-left">
+    <div class="app-admin-wrap layout-horizontal-bar">
+        <div class="main-header">
+            <div class="logo">
+                <img src="{% static 'images/SGA.svg' %}" alt="">
+            </div>
+
+            <div class="menu-toggle">
+                <div></div>
+                <div></div>
+                <div></div>
+            </div>
+
+            <div style="margin: auto"></div>
+
+            
+
+            <div class="header-part-right">
+                <!-- Full screen toggle -->
+                <i class="i-Full-Screen header-icon d-none d-sm-inline-block" data-fullscreen></i>
+            </div>
+
+        </div>
+        <!-- header top menu end -->
+
+        <div class="horizontal-bar-wrap">
+            <div class="header-topnav">
+                <div class="container-fluid">
+                    <div class="topnav rtl-ps-none" id="" data-perfect-scrollbar data-suppress-scroll-x="true">
+                        <ul class="menu float-left">
+                            <li>
+                                <div>
+                                    <div>
+                                        <label class="toggle" for="drop-2">   
+                                        Home
+                                    </label>
+                                        <a href="{% url 'core:index'%}">
+                                            <i class="nav-icon mr-2 i-Bar-Chart"></i> Home
+                                        </a><input type="checkbox" id="drop-2">
+                                        <ul>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </li>
+
+
+                            <li>
+                                <div>
+                                    <div>
+                                        <label class="toggle" for="drop-2">   Estoque
+                                        </label>
+                                        <a href="#">
+                                            <i class="nav-icon mr-2 i-Box-Full"></i> Estoque
+                                        </a><input type="checkbox" id="drop-2">
+                                        <ul>
+                                            <li class="">
+                                                <a href="{% url 'estoque:estoque' %}">
+                                                    <i class="nav-icon mr-2 i-Box-Full"></i>
+                                                    <span class="item-name">Geral</span>
+                                                </a>
+                                            </li>
+
+                                            <li class="">
+                                                <a href="{% url 'estoque:entrada' %}">
+                                                    <i class="nav-icon mr-2 i-Add"></i>
+                                                    <span class="item-name">Entradas</span>
+                                                </a>
+                                            </li>
+                                            <li class="">
+                                                <a href="{% url 'estoque:saida' %}">
+                                                    <i class="nav-icon mr-2 i-Remove"></i>
+                                                    <span class="item-name">Saídas</span>
+                                                </a>
+                                            </li>
+                                            <li class="">
+                                                <a href="{% url 'estoque:emprestimo' %}">
+                                                    <i class="nav-icon mr-2 i-Right"></i>
+                                                    <span class="item-name">Empréstimos</span>
+                                                </a>
+                                            </li>
+
+                                        </ul>
+                                    </div>
+                                </div>
+                            </li>
+                            <!-- end ui kits -->
+
+                            <li>
+                                <div>
+                                    <div>
+                                        <label class="toggle" for="drop-2">Funcionários            </label>
+                                        <a href="#">
+                                            <i class="nav-icon mr-2 i-Business-Man"></i> Funcionários
+                                        </a><input type="checkbox" id="drop-2">
+                                        <ul>
+                                            <li class="">
+                                                <a href="{% url 'funcionario:index' %}">
+                                                    <i class="nav-icon mr-2 i-Business-Man"></i>
+                                                    <span class="item-name">Geral</span>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </li>
+                            <!-- end extra uikits -->
+
+
+                            <li>
+                                <div>
+                                    <div>
+                                        <label class="toggle" for="drop-2">Forms</label>
+                                        <a href="#">
+                                            <i class="nav-icon mr-2 i-Robot"></i> Consertos
+                                        </a><input type="checkbox" id="drop-2">
+                                        <ul>
+                                            <li class="">
+                                                <a href="">
+                                                    <i class="nav-icon mr-2 i-Robot"></i>
+                                                    <span class="item-name">Geral</span>
+                                                </a>
+                                            </li>
+                                            
+                                        </ul>
+                                    </div>
+                                </div>
+                            </li>
+
+                            <li>
+                                <div>
+                                    <div>
+                                        <label class="toggle" for="drop-2">Forms</label>
+                                        <a href="#">
+                                            <i class="nav-icon mr-2 i-Green-House"></i> Obras
+                                        </a><input type="checkbox" id="drop-2">
+                                        <ul>
+
+                                            <li class="">
+                                                <a href="{% url 'obra:index' %}">
+                                                    <i class="nav-icon mr-2 i-Green-House"></i>
+                                                    <span class="item-name">Geral</span>
+                                                </a>
+                                            </li>
+                                            
+                                        </ul>
+                                    </div>
+                                </div>
+                            </li>
+
+                            <li>
+                                <div>
+                                    <div>
+                                        <label class="toggle" for="drop-2">Forms</label>
+                                        <a href="#">
+                                            <i class="nav-icon mr-2 i-Car-3"></i> Veículos
+                                        </a><input type="checkbox" id="drop-2">
+                                        <ul>
+                                            <li class="">
+                                                <a href="{% url 'veiculo:index' %}">
+                                                    <i class="nav-icon mr-2 i-Car-3"></i>
+                                                    <span class="item-name">Geral</span>
+                                                </a>
+                                            </li>
+                                            
+                                        </ul>
+                                    </div>
+                                </div>
+                            </li>
+                            <!-- end Forms -->
+
+
+
+                        </ul>
+
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <!--=============== Horizontal bar End ================-->
+
+
+
+        <!-- ============ Body content start ============= -->
+        <div class="main-content-wrap d-flex flex-column">
+        {% block content %}
+
+        {% endblock content %}
+
+
+            <!-- Footer Start -->
+            <div class="flex-grow-1"></div>
+            <div class="app-footer">
+                <div class="footer-bottom border-top pt-1 d-flex flex-column flex-sm-row align-items-center">
+                    <span class="flex-grow-1"></span>
+                    <div class="d-flex align-items-center">
+                        <img class="logo" style="width: 50px; height: 50px; padding-bottom: 15px;" src="{% static 'images/SGA.svg'%}" alt=" ">
+                        <div>
+                            <p class="m-0">&copy; 2019</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- fotter end -->
+        </div>
+        <!-- ============ Body content End ============= -->
+    </div>
+    <!--=============== End app-admin-wrap ================-->
+
+    <!-- ============ Search UI Start ============= -->
+
+    <script src="{% static 'js/vendor/jquery-3.3.1.min.js' %}"></script>
+    <script src="{% static 'js/vendor/bootstrap.bundle.min.js' %}"></script>
+ 
+    <script src="{% static 'js/sidebar-horizontal.script.js' %}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.10/js/select2.min.js"></script>
+
+
+    <script src="{% static 'js/vendor/datatables.min.js' %}"></script>
+    <script src="{% static 'js/datatables.script.js' %}"></script>
+
+    <script type="text/javascript">
+        function showEditPopup(url) {
+            var win = window.open(url, "Edit",
+                'height=800,width=700,resizable=yes,scrollbars=yes');
+            return false;
+        }
+        function showAddPopup(triggeringLink) {
+            var name = triggeringLink.id.replace(/^add_/, '');
+            href = triggeringLink.href;
+            var win = window.open(href, name, 'height=800,width=700,resizable=yes,scrollbars=yes');
+            win.focus();
+            return false;
+        }
+        function closePopup(win, newID, newRepr, id) {
+            $(id).append('<option value=' + newID + ' selected >' + newRepr + '</option>')
+            win.close();
+            location.reload();
+        }
+    
+    </script>
+    {% block js %}{% endblock js %}
+
+</body>
+
+</html>

@@ -1,0 +1,146 @@
+{% extends 'base.html' %}
+{% block content %}
+{% load static %}
+
+
+<div class="separator-breadcrumb border-top"></div>
+
+<div class="card mt-2 mb-4">
+    <div class="card-header bg-transparent" style="font-weight: bold; text-align: center;">GERAR RELATÓRIO</div>
+    <div class="card-body">
+        <ul class="nav nav-pills nav-fill mb-3" id="pills-tab" role="tablist">
+            <li class="nav-item">
+                <a class="nav-link active" id="pills-home-tab" data-toggle="pill" href="#pills-home" role="tab"
+                    aria-controls="pills-home" aria-selected="true">ENTRADAS</a>
+            </li>
+        </ul>
+        <!-- -------------------- RELATÓRIO DE ESTOQUE ---------------------------  -->
+        <div class="tab-content ul-tab__content" id="pills-tabContent">
+            <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
+                <div class="card text-left">
+                    <div class="card-body">
+                        <div class="breadcrumb">
+                            <h1>Entradas</h1>
+                        </div>
+
+                        <form role="form" method="get">
+
+                            <div class="col-sm-5">
+                                <div class="form-group">
+                                    <div class="form-line">
+                                        <label>Item</label>
+                                        <br>
+                                        <select class="form-control" id="id_item" name="id_item">
+                                            <option value="0">Todos</option>
+                                            {% for item in itens %}
+                                            <option value="{{ item.id }}">{{ item.nome }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-sm-5">
+                                <div class="form-group">
+                                    <div class="form-line">
+                                        <label>Categoria</label>
+                                        <br>
+                                        <select class="form-control" id="id_categoria" name="id_categoria">
+                                            <option value="0">Todas</option>
+                                            {% for categoria in categorias %}
+                                            <option value="{{ categoria.id }}">{{ categoria.categoria }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-sm-5">
+                                <div class="form-group">
+                                    <div class="form-line">
+                                        <label>Prateleira</label>
+                                        <br>
+                                        <select class="form-control" id="id_prateleira" name="id_prateleira">
+                                            <option value="0">Todas</option>
+                                            {% for prateleira in prateleiras %}
+                                            <option value="{{ prateleira.id }}">{{ prateleira.nome }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-sm-5">
+                                <div class="form-group">
+                                    <div class="form-line">
+                                        <label>Funcionario</label>
+                                        <br>
+                                        <select class="form-control" id="id_funcionario" name="id_funcionario">
+                                            <option value="0">Todos</option>
+                                            {% for funcionario in funcionarios %}
+                                            <option value="{{ funcionario.id }}">{{ funcionario.nome }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-sm-5">
+                                <div class="form-group">
+                                    <div class="form-line">
+                                        <label>Obra</label>
+                                        <br>
+                                        <select class="form-control" id="id_obra" name="id_obra">
+                                            <option value="0">Todas</option>
+                                            {% for obra in obras %}
+                                            <option value="{{ obra.id }}">{{ obra.nome }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-sm-5">
+                                <div class="form-group">
+                                    <div class="form-line">
+                                        <label>Período de</label>
+                                        <input type="date" name="from"
+                                            {% if request.GET.from %}value="{{request.GET.from}}"
+                                            {% else %}value="{% now "d/m/Y" %}" {% endif %}
+                                            class="form-control datepicker">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-sm-5">
+                                <div class="form-group">
+                                    <div class="form-line">
+                                        <label>até</label>
+                                        <input type="date" name="to" {% if request.GET.to %}value="{{request.GET.to}}"
+                                            {% else %}value="{% now "d/m/Y" %}" {% endif %}
+                                            class="form-control datepicker">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-sm-2">
+                                <input type="submit" name="gerar" id="gerar" style="margin-top:25px;"
+                                    class="btn btn-primary foot-btn"></button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- --------------- RELATÓRIO DE SAIDAS --------------- -->
+        </div>
+    </div>
+</div>
+
+{% endblock content %}
+
+{% block js %}
+
+    <script src="{% static 'js/saida_relat.js' %}"></script>
+
+{% endblock js %}

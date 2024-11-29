@@ -1,0 +1,83 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load humanize %}
+{% block content %}
+
+
+<div class="row">
+    <div class="col-lg-12 col-xl-12">
+        <div class="card" style="margin-bottom: 2.5%;">
+            <div class="card-body">
+                <div class="row justify-content-md-center">
+                    <div class="col-lg-10 col-xl-10">
+                        {% if user.is_authenticated %}
+                        <h3 class="headding t-font-bold">Logado como: {{ user }}</h3>
+                        <a href="{% url 'core:logout' %}" class="btn btn-danger">
+                            <i class="nav-icon i-Add font-weight-bold" aria-hidden="true"></i> Sair
+                        </a>
+                        {% else %}
+                        <h3 class="headding t-font-bold">Logado como: Anônimo</h3>
+                        <a href="{% url 'core:login' %}" class="btn btn-success">
+                            <i class="nav-icon i-Add font-weight-bold" aria-hidden="true"></i> Login
+                        </a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <!-- ICON BG -->
+    <div class="col-lg-3 col-md-6 col-sm-6">
+        <div class="card card-icon-bg card-icon-bg-primary o-hidden mb-4">
+            <div class="card-body text-center">
+                <i class="i-Add-User"></i>
+                <div class="content">
+                    <p class="text-muted mt-2 mb-0">FUNCIONÁRIOS</p>
+                    <p class="text-primary text-24 line-height-1 mb-2">{{ funcionarios }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-3 col-md-6 col-sm-6">
+        <div class="card card-icon-bg card-icon-bg-primary o-hidden mb-4">
+            <div class="card-body text-center">
+                <i class="i-Green-House"></i>
+                <div class="content">
+                    <p class="text-muted mt-2 mb-0">OBRAS</p>
+                    <p class="text-primary text-24 line-height-1 mb-2">{{ obras }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-3 col-md-6 col-sm-6">
+        <div class="card card-icon-bg card-icon-bg-primary o-hidden mb-4">
+            <div class="card-body text-center">
+                <i class="i-Car-3"></i>
+                <div class="content">
+                    <p class="text-muted mt-2 mb-0">VEÍCULOS</p>
+                    <p class="text-primary text-24 line-height-1 mb-2">{{ veiculos }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-3 col-md-6 col-sm-6">
+        <div class="card card-icon-bg card-icon-bg-primary o-hidden mb-4">
+            <div class="card-body text-center">
+                <i class="i-Statistic"></i>
+                <div class="content">
+                    <p class="text-muted mt-2 mb-0">ITENS</p>
+                    <p class="text-primary text-24 line-height-1 mb-2">{{ itens }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+{% endblock content %}

@@ -1,0 +1,211 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load humanize %}
+{% block content %}
+
+<div class="breadcrumb">
+    <h1>VEICULOS</h1>
+    <ul>
+        <li>GERAL</li>
+    </ul>
+</div>
+
+<div class="separator-breadcrumb border-top"></div>
+
+
+{% for v in veiculo %}
+
+<section class="ul-product-detail">
+    <div class="card">
+        <div class="card-body">
+            <div class="container">
+                <h2 class="text-center" style="font-weight: bold;"> <i class="nav-icon i-Car-3 mr-1"></i> {{ v.nome }}
+                </h2>
+                <div class="row" style="text-align: center;">
+                    <div class="col">
+                        <div class="container-fluid well span6">
+                            <div class="row-fluid">
+                                <div class="span8">
+                                    <h5 style="color:#069; font-weight: bold;">
+                                        Ano</h5>
+                                    <h5> {{ v.ano }} </h5>
+                                    <h5 style="color:#069; font-weight: bold;"> PLACA </h5>
+                                    <h5> {{ v.placa }} </h5>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="container-fluid well span6">
+                            <div class="row-fluid">
+                                <div class="span8">
+                                    <h5 style="color:#069; font-weight: bold;">
+                                        Ativo</h5>
+                                    <h5> Sim  </h5>
+                                    <h5 style="color:#069; font-weight: bold;"> RENAVAM </h5>
+                                    <h5> {{ v.renavam }} </h5>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<div class="separator-breadcrumb border-top"></div>
+
+<div class="row mb-4" style="margin-top: -3%;">
+    <div class="col-md-12 mb-4">
+        <div class="card-body" style="text-align: center; background-color: rgb(187, 253, 255);">
+            <span style="font-weight: bold; color: black; font-size: 18px;">CONSERTOS</span>
+            {% if user.is_authenticated %}
+            <span style="padding-left: 50px;">
+                <a href="/../veiculos/{{ v.get_conserto_url }}" class="btn btn-success"
+                    onclick="return showAddPopup(this);">
+                    <i class="nav-icon i-Add font-weight-bold" aria-hidden="true"></i> Adicionar
+                </a>
+            </span>
+            {% endif %}
+
+        </div>
+    </div>
+</div>
+
+
+
+<div class="row mb-4" style="margin-top: -4%;">
+    <div class="col-md-12 mb-4">
+        <div class="card text-left">
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table id="zero_configuration_table" class="display table table-striped table-bordered"
+                        style="width:100%">
+                        <thead class="table-dark">
+                            <tr>
+                                <th>Data</th>
+                                <th>Categoria</th>
+                                <th>Descrição</th>
+                                <th>Local</th>
+                                <th>Valor</th>
+                                <th scope="col">Ação</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for conserto in consertos %}
+                            <tr>
+                                <td>{{ conserto.get_data }}</td>
+                                <td>{{ conserto.categoria }}</td>
+                                <td>{{ conserto.obs }}</td>
+                                <td>{{ conserto.oficina }}</td>
+                                <td>R$ {{ conserto.valor|intcomma }}</td>
+                                <td>
+                                {% if user.is_authenticated %}
+                                    <a href="#" class="text-success mr-2">
+                                        <i class="nav-icon i-Pen-2 font-weight-bold"></i>
+                                    </a>
+                                    <a href="#" class="text-danger mr-2" onclick="excluir({{ conserto.id }}, 'conserto')">
+                                        <i class="nav-icon i-Close-Window font-weight-bold"></i>
+                                    </a>
+                                {% endif %}
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <th>Data</th>
+                                <th>Categoria</th>
+                                <th>Descrição</th>
+                                <th>Local</th>
+                                <th>Valor</th>
+                                <th scope="col">Ação</th>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mb-4" style="margin-top: -3%;">
+    <div class="col-md-12 mb-4">
+        <div class="card-body" style="text-align: center; background-color: rgb(187, 253, 255);">
+            <span style="font-weight: bold; color: black; font-size: 18px;">ABASTECIMENTOS</span>
+            {% if user.is_authenticated %}
+            <span style="padding-left: 50px;">
+                <a href="/../veiculos/{{ v.get_abastecimento_url }}" class="btn btn-success"
+                    onclick="return showAddPopup(this);">
+                    <i class="nav-icon i-Add font-weight-bold" aria-hidden="true"></i> Adicionar
+                </a>
+            </span>
+            {% endif %}
+
+        </div>
+    </div>
+</div>
+
+{% endfor %}
+<div class="row mb-4" style="margin-top: -4%;">
+    <div class="col-md-12 mb-4">
+        <div class="card text-left">
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table id="secondTable" class="display table table-striped table-bordered" style="width:100%">
+                        <thead class="table-dark">
+                            <tr>
+                                <th>Data</th>
+                                <th>Posto</th>
+                                <th>Requisição</th>
+                                <th>Valor</th>
+                                <th scope="col">Ação</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for abastecimento in abastecimentos %}
+                            <tr>
+                                <td>{{ abastecimento.get_data }}</td>
+                                <td>{{ abastecimento.posto }}</td>
+                                <td>{{ abastecimento.requisicao }}</td>
+                                <td>R$ {{ abastecimento.valor|intcomma }}</td>
+                                <td>
+                                {% if user.is_authenticated %}
+                                    <a href="#" class="text-success mr-2">
+                                        <i class="nav-icon i-Pen-2 font-weight-bold"></i>
+                                    </a>
+                                    <a href="#" class="text-danger mr-2" onclick="excluir({{ abastecimento.id }}, 'abastecimento')">
+                                        <i class="nav-icon i-Close-Window font-weight-bold"></i>
+                                    </a>
+                                </td>
+                                {% endif %}
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <th>Data</th>
+                                <th>Posto</th>
+                                <th>Requisição</th>
+                                <th>Valor</th>
+                                <th scope="col">Ação</th>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- end of main content -->
+{% endblock content %}
+
+
+{% block js %}
+<script src="{% static 'js/excluir_alert.js' %}"></script>
+<script src="{% static 'js/vendor/sweetalert2.min.js' %}"></script>
+<script src="{% static 'js/vendor/secondTable.script.js' %}"></script>
+{% endblock js %}

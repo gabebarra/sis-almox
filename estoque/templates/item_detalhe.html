@@ -1,0 +1,459 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load humanize %}
+{% block content %}
+
+<div class="breadcrumb">
+    <h1>INFORMAÇÃO</h1>
+    <ul>
+        <li>Item</li>
+    </ul>
+</div>
+
+<div class="separator-breadcrumb border-top"></div>
+
+{% for item in itens %}
+
+<section class="ul-product-detail">
+    <div class="card">
+        <div class="card-body">
+            <div class="container">
+                <h2 class="text-center" style="font-weight: bold;"> <i class="nav-icon i-Gear-2 mr-1"></i> {{ item.nome }} </h2>
+                <div class="row" style="text-align: center;">
+                    <div class="col">
+                        <div class="container-fluid well span6">
+                            <div class="row-fluid">
+                                <div class="span8">
+                                    <h5 style="color:#069; font-weight: bold;"><i class="nav-icon i-Box-Full mr-1"></i>
+                                        Estoque</h5>
+                                    <h5> {{ item.estoque }} {{ item.unidade }} </h5>
+                                    <h5 style="color:#069; font-weight: bold;"> Estoque Min </h5>
+                                    <h5> {{ item.estoque_min }} {{ item.unidade }} </h5>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="container-fluid well span6">
+                            <div class="row-fluid">
+                                <div class="span8">
+                                    <h5 style="color:#069; font-weight: bold;"> Categoria</h5>
+                                    <h5>{{ item.categoria }}</h5>
+                                    <h5 style="color:#069; font-weight: bold;">Preço</h5>
+                                    <h5>R$: {{ item.valor|intcomma }}</h5>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endfor %}
+
+<div class="separator-breadcrumb border-top"></div>
+
+<div class="card">
+    <div class="card-body">
+        <div class="container">
+            <div class="card text-left">
+
+                <ul class="nav nav-tabs" id="myIconTab" role="tablist">
+                    <li class="nav-item">
+                        <a class="nav-link active" id="home-icon-tab" data-toggle="tab" href="#homeIcon" role="tab"
+                            aria-controls="homeIcon" aria-selected="true"><i
+                                class="nav-icon i-Add mr-1"></i>Entradas</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="profile-icon-tab" data-toggle="tab" href="#profileIcon" role="tab"
+                            aria-controls="profileIcon" aria-selected="false"><i class="nav-icon i-Remove mr-1"></i>
+                            Saídas</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="profile-icon-tab" data-toggle="tab" href="#emprestimos" role="tab"
+                            aria-controls="emprestimos" aria-selected="false"><i class="nav-icon i-Up mr-1"></i>
+                            Empréstimos</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="profile-icon-tab" data-toggle="tab" href="#pendentes" role="tab"
+                            aria-controls="emprestimos" aria-selected="false"><i
+                                class="nav-icon i-Information mr-1"></i>
+                            Pendentes</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="contact-icon-tab" data-toggle="tab" href="#contactIcon" role="tab"
+                            aria-controls="contactIcon" aria-selected="false"><i class="nav-icon i-Money-Bag mr-1"></i>
+                            Consertos</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="contact-icon-tab" data-toggle="tab" href="#contactIcon" role="tab"
+                            aria-controls="contactIcon" aria-selected="false"><i
+                                class="nav-icon i-Bar-Chart-2 mr-1"></i>
+                            Gráficos</a>
+                    </li>
+                </ul>
+                <div class="tab-content" id="myIconTabContent">
+                    <div class="tab-pane fade show active" id="homeIcon" role="tabpanel"
+                        aria-labelledby="home-icon-tab">
+
+                        <div class="card text-left">
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table id="secondTable" class="display table table-striped table-bordered"
+                                        style="width:100%">
+                                        <thead class="thead-dark">
+                                            <tr>
+                                                <th>Data</th>
+                                                <th>Funcionário</th>
+                                                <th>Obra</th>
+                                                <th>OBS</th>
+                                                <th>QTDE</th>
+                                                <th scope="col">Ação</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+
+                                            {% for entrada in entradas %}
+                                            <tr>
+                                                <td>{{ entrada.get_data }}</td>
+                                                {% if entrada.funcionario %}
+                                                <td> <a style="color: blue; font-weight: bold;"
+                                                        href="{% url 'funcionario:funcionario_detalhe' pk=entrada.funcionario.id %}">
+                                                        {{ entrada.funcionario.nome|default_if_none:'-' }} </a> </td>
+                                                {% else %}
+                                                    <td>-</td>
+                                                {% endif %}
+                                                <td>{{ entrada.obra|default_if_none:'-' }}</td>
+                                                <td>{{ entrada.obs|default_if_none:'-' }}</td>
+                                                <td>{{ entrada.quantidade }} {{ entrada.item.unidade }}</td>
+                                                <td>
+                                                {% if user.is_authenticated %}
+                                                    <a href="{% url 'estoque:entrada_item_editar' pk=entrada.id %}" class="text-success mr-2" 
+                                                        onclick="return showAddPopup(this);">
+                                                        <i class="nav-icon i-Pen-2 font-weight-bold"></i>
+                                                    </a>
+                                                    <a href="#" class="text-danger mr-2"
+                                                        onclick="excluir({{ entrada.id }}, 'entrada_detalhe')">
+                                                        <i class="nav-icon i-Close-Window font-weight-bold"></i>
+                                                </a>
+                                                {% endif %}
+                                                </td>
+                                            </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                        <tfoot>
+                                            <tr>
+                                                <th>Data</th>
+                                                <th>Funcionário</th>
+                                                <th>Obra</th>
+                                                <th>OBS</th>
+                                                <th>QTDE</th>
+                                                <th scope="col">Ação</th>
+                                            </tr>
+                                        </tfoot>
+                                    </table>
+                                </div>
+
+                            </div>
+                        </div>
+
+                    </div>
+
+
+                    <div class="tab-pane fade" id="profileIcon" role="tabpanel" aria-labelledby="profile-icon-tab">
+
+                        <div class="card text-left">
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table id="zero_configuration_table"
+                                        class="display table table-striped table-bordered" style="width:100%">
+                                        <thead class="thead-dark">
+                                            <tr>
+                                                <th>Data</th>
+                                                <th>Funcionário</th>
+                                                <th>Obra</th>
+                                                <th>OBS</th>
+                                                <th>QTDE</th>
+                                                <th scope="col">Ação</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+
+                                            {% for saida in saidas %}
+
+                                            {% if saida.emprestimo == False %}
+
+                                            <tr>
+                                                <td>{{ saida.get_data }}</td>
+                                                {% if saida.funcionario %}
+                                                <td> <a style="color: blue; font-weight: bold;"
+                                                        href="{% url 'funcionario:funcionario_detalhe' pk=saida.funcionario.id %}">
+                                                        {{ saida.funcionario.nome|default_if_none:'-' }} </a>
+                                                    {% if saida.galeria %}
+                                                        <a href="{% url 'estoque:fotos_saida' pk=saida.id %}" target="_blank" class="text-danger mr-2" >
+                                                        <i class="nav-icon i-File-Pictures font-weight-bold"></i></a>
+                                                    {% endif %}
+                                                </td>
+                                                {% else %}
+                                                    <td>-
+                                                        {% if saida.galeria %}
+                                                            <a href="{% url 'estoque:fotos_saida' pk=saida.id %}" target="_blank" class="text-danger mr-2" >
+                                                            <i class="nav-icon i-File-Pictures font-weight-bold"></i></a>
+                                                        {% endif %}
+                                                    </td>
+                                                {% endif %}
+                                                <td>{{ saida.obra|default_if_none:'-' }}</td>
+                                                <td>{{ saida.obs|default_if_none:'-' }}</td>
+                                                <td>{{ saida.quantidade }} {{ saida.item.unidade }}</td>
+                                                <td>
+                                                {% if user.is_authenticated %}
+                                                    <a href="{% url 'estoque:saida_item_editar' pk=saida.id %}" class="text-success mr-2" 
+                                                        onclick="return showAddPopup(this);">
+                                                        <i class="nav-icon i-Pen-2 font-weight-bold"></i>
+                                                    </a>
+                                                    <a href="#" class="text-danger mr-2"
+                                                        onclick="excluir({{ saida.id }}, 'saida_detalhe')">
+                                                        <i class="nav-icon i-Close-Window font-weight-bold"></i>
+                                                </a>
+                                                {% endif %}
+                                                </td>
+                                            </tr>
+                                            {% endif %}
+                                            {% endfor %}
+                                        </tbody>
+                                        <tfoot>
+                                            <tr>
+                                                <th>Data</th>
+                                                <th>Funcionário</th>
+                                                <th>Obra</th>
+                                                <th>OBS</th>
+                                                <th>QTDE</th>
+                                                <th scope="col">Ação</th>
+                                            </tr>
+                                        </tfoot>
+                                    </table>
+                                </div>
+
+                            </div>
+                        </div>
+
+
+                    </div>
+
+                    <div class="tab-pane fade" id="emprestimos" role="tabpanel" aria-labelledby="home-icon-tab">
+
+                        <div class="card text-left">
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table id="thirdTable" class="display table table-striped table-bordered"
+                                        style="width:100%">
+                                        <thead class="thead-dark">
+                                            <tr>
+                                                <th>Data</th>
+                                                <th>Funcionário</th>
+                                                <th>Obra</th>
+                                                <th>OBS</th>
+                                                <th>QTDE</th>
+                                                <th>Devolução</th>
+                                                <th scope="col">Ação</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+
+                                            {% for saida in saidas %}
+
+                                            {% if saida.emprestimo == True %}
+
+                                            <tr>
+                                                <td>{{ saida.get_data }}</td>
+                                                {% if saida.funcionario %}
+                                                <td> <a style="color: blue; font-weight: bold;"
+                                                        href="{% url 'funcionario:funcionario_detalhe' pk=saida.funcionario.id %}">
+                                                        {{ saida.funcionario.nome|default_if_none:'-' }} </a> 
+                                                    {% if saida.galeria %}
+                                                        <a href="{% url 'estoque:fotos_saida' pk=saida.id %}" target="_blank" class="text-danger mr-2" >
+                                                        <i class="nav-icon i-File-Pictures font-weight-bold"></i></a>
+                                                    {% endif %}
+                                                </td>
+                                                {% else %}
+                                                    <td>-
+                                                        {% if saida.galeria %}
+                                                            <a href="{% url 'estoque:fotos_saida' pk=saida.id %}" target="_blank" class="text-danger mr-2" >
+                                                            <i class="nav-icon i-File-Pictures font-weight-bold"></i></a>
+                                                        {% endif %}
+                                                    </td>
+                                                {% endif %}
+                                                {% if saida.obra %}
+                                                <td> <a style="color: blue; font-weight: bold;"
+                                                        href="{% url 'obra:obra_detalhe' pk=saida.obra.id %}">
+                                                        {{ saida.obra.nome|default_if_none:'-' }} </a> </td>
+                                                {% else %}
+                                                    <td>-</td>
+                                                {% endif %}
+                                                <td>{{ saida.obs|default_if_none:'-' }}</td>
+                                                <td>{{ saida.quantidade }} {{ saida.item.unidade }}</td>
+                                                {% if saida.devolucao != NULL %}
+                                                    <td style="color: green; font-weight: bold;">{{ saida.get_devolucao }}
+                                                </td>
+                                                {% else %}
+                                                    <td style="color: red; font-weight: bold;">Pendente</td>
+                                                {% endif %}
+                                                <td>
+                                                {% if user.is_authenticated %}
+                                                    <a href="{% url 'estoque:emprestimo_devolver' pk=saida.id %}" class="text-success mr-2"
+                                                        onclick="return showAddPopup(this);">
+                                                        <span style="font-weight: bold;">D</span>
+                                                    </a>
+                                                    <a href="{% url 'estoque:emprestimo_editar' pk=saida.id %}" class="text-success mr-2"
+                                                        onclick="return showAddPopup(this);">
+                                                        <i class="nav-icon i-Pen-2 font-weight-bold"></i>
+                                                    </a>
+                                                    <a href="#" class="text-danger mr-2" onclick="excluir({{ saida.id }}, 'saida_detalhe')">
+                                                        <i class="nav-icon i-Close-Window font-weight-bold"></i>
+                                                    </a>
+                                                    {% endif %}
+                                                </td>
+                                            </tr>
+                                            {% endif %}
+                                            {% endfor %}
+                                        </tbody>
+                                        <tfoot>
+                                            <tr>
+                                                <th>Data</th>
+                                                <th>Funcionário</th>
+                                                <th>OBS</th>
+                                                <th>QTDE</th>
+                                                <th>Devolução</th>
+                                                <th scope="col">Ação</th>
+                                            </tr>
+                                        </tfoot>
+                                    </table>
+                                </div>
+
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="tab-pane fade" id="pendentes" role="tabpanel" aria-labelledby="home-icon-tab">
+
+                        <div class="card text-left">
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table id="fourTable" class="display table table-striped table-bordered"
+                                        style="width:100%">
+                                        <thead class="thead-dark">
+                                            <tr>
+                                                <th>Data</th>
+                                                <th>Funcionário</th>
+                                                <th>Obra</th>
+                                                <th>OBS</th>
+                                                <th>QTDE</th>
+                                                <th>Devolução</th>
+                                                <th scope="col">Ação</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+
+                                            {% for saida in saidas %}
+
+                                            {% if saida.emprestimo == True and saida.devolucao == NULL %}
+
+                                            <tr>
+                                                <td>{{ saida.get_data }}</td>
+                                                {% if saida.funcionario %}
+                                                <td> <a style="color: blue; font-weight: bold;"
+                                                        href="{% url 'funcionario:funcionario_detalhe' pk=saida.funcionario.id %}">
+                                                        {{ saida.funcionario.nome|default_if_none:'-' }} </a> 
+                                                    {% if saida.galeria %}
+                                                        <a href="{% url 'estoque:fotos_saida' pk=saida.id %}" target="_blank" class="text-danger mr-2" >
+                                                        <i class="nav-icon i-File-Pictures font-weight-bold"></i></a>
+                                                    {% endif %}
+                                                </td>
+                                                {% else %}
+                                                    <td>-
+                                                        {% if saida.galeria %}
+                                                            <a href="{% url 'estoque:fotos_saida' pk=saida.id %}" target="_blank" class="text-danger mr-2" >
+                                                            <i class="nav-icon i-File-Pictures font-weight-bold"></i></a>
+                                                    {% endif %}
+                                                    </td>
+                                                {% endif %}
+                                                {% if saida.obra %}
+                                                <td> <a style="color: blue; font-weight: bold;"
+                                                        href="{% url 'obra:obra_detalhe' pk=saida.obra.id %}">
+                                                        {{ saida.obra.nome|default_if_none:'-' }} </a> </td>
+                                                {% else %}
+                                                    <td>-</td>
+                                                {% endif %}
+                                                <td>{{ saida.obs|default_if_none:'-' }}</td>
+                                                <td>{{ saida.quantidade }} {{ saida.item.unidade }}</td>
+                                                {% if saida.devolucao != NULL %}
+                                                <td style="color: green; font-weight: bold;">{{ saida.get_devolucao }}
+                                                </td>
+                                                {% else %}
+                                                <td style="color: red; font-weight: bold;">Pendente</td>
+                                                {% endif %}
+                                                <td>
+                                                {% if user.is_authenticated %}
+                                                    <a href="{% url 'estoque:emprestimo_devolver' pk=saida.id %}" class="text-success mr-2"
+                                                        onclick="return showAddPopup(this);">
+                                                        <span style="font-weight: bold;">D</span>
+                                                    </a>
+                                                    <a href="{% url 'estoque:emprestimo_editar' pk=saida.id %}" class="text-success mr-2"
+                                                        onclick="return showAddPopup(this);">
+                                                        <i class="nav-icon i-Pen-2 font-weight-bold"></i>
+                                                    </a>
+                                                    <a href="#" class="text-danger mr-2" onclick="excluir({{ saida.id }}, 'saida_detalhe')">
+                                                        <i class="nav-icon i-Close-Window font-weight-bold"></i>
+                                                    </a>
+                                                    {% endif %}
+                                                </td>
+                                            </tr>
+                                            {% endif %}
+                                            {% endfor %}
+                                        </tbody>
+                                        <tfoot>
+                                            <tr>
+                                                <th>Data</th>
+                                                <th>Funcionário</th>
+                                                <th>OBS</th>
+                                                <th>QTDE</th>
+                                                <th>Devolução</th>
+                                                <th scope="col">Ação</th>
+                                            </tr>
+                                        </tfoot>
+                                    </table>
+                                </div>
+
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="tab-pane fade" id="contactIcon" role="tabpanel" aria-labelledby="contact-icon-tab">
+                        Etsy mixtape wayfarers, ethical wes anderson tofu before they sold out mcsweeney's organic lomo
+                        retro fanny pack lo-fi farm-to-table readymade. Messenger bag gentrify pitchfork tattooed craft
+                        beer, iphone skateboard locavore.</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+<!-- end of main content -->
+{% endblock content %}
+
+
+{% block js %}
+    <script src="{% static 'js/vendor/secondTable.script.js' %}"></script>
+    <script src="{% static 'js/vendor/thirdTable.script.js' %}"></script>
+    <script src="{% static 'js/vendor/fourTable.script.js' %}"></script>
+    <script src="{% static 'js/excluir_alert.js' %}"></script>
+    <script src="{% static 'js/vendor/sweetalert2.min.js' %}"></script>
+{% endblock js %}
